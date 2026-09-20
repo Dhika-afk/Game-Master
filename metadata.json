@@ -1,0 +1,6 @@
+{
+  "name": "Game Master Mataram",
+  "description": "Website rental PlayStation dan gaming console profesional di Mataram dan sekitarnya dengan sistem booking online, WhatsApp integration, dan Admin CMS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
