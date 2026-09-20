@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Gamepad2, Search, Menu, X, Shield, PhoneCall } from 'lucide-react';
+import { Gamepad2, Search, Menu, X, Shield } from 'lucide-react';
 import { WebsiteSettings } from '../types.js';
 import { Logo } from './Logo.js';
-import { formatPhoneDisplay, generateDirectAdminWhatsAppUrl } from '../utils/formatters.js';
 
 interface NavbarProps {
   settings: WebsiteSettings;
@@ -120,23 +119,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right Actions */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* Direct WhatsApp Contact */}
-            <a
-              href={generateDirectAdminWhatsAppUrl(settings.whatsappNumber)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden lg:flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900/90 hover:bg-neutral-850 border border-neutral-800 rounded-lg transition-colors"
-              title="Chat WhatsApp Admin Game Master"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-blue-400" />
-              <span>{formatPhoneDisplay(settings.whatsappNumber)}</span>
-            </a>
-
             {/* Cek Booking Status */}
             <button
               id="btn-cek-booking"
               onClick={onOpenStatusLookup}
-              className="px-3.5 py-2 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/70 rounded-lg transition-colors flex items-center gap-1.5"
+              className="px-3.5 py-2 text-xs font-semibold text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-850 border border-neutral-700/70 rounded-lg transition-colors flex items-center gap-1.5"
               title="Lacak status pesanan dengan Booking ID"
             >
               <Search className="w-3.5 h-3.5 text-cyan-400" />
@@ -262,26 +249,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>BOOKING SEKARANG</span>
             </button>
 
-            <div className="flex items-center justify-between pt-2 text-xs text-neutral-400 px-1">
-              <a
-                href={generateDirectAdminWhatsAppUrl(settings.whatsappNumber)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-neutral-300 hover:text-blue-400 transition-colors"
-              >
-                <PhoneCall className="w-3.5 h-3.5 text-blue-400" />
-                <span>WA: {formatPhoneDisplay(settings.whatsappNumber)}</span>
-              </a>
+            <div className="flex items-center justify-end pt-2 text-xs text-neutral-400 px-1">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   if (isAdminLoggedIn) onNavigateToAdmin();
                   else onOpenAdminLogin();
                 }}
-                className="text-neutral-500 hover:text-neutral-300 flex items-center gap-1"
+                className="text-neutral-500 hover:text-neutral-300 flex items-center gap-1.5 transition-colors"
               >
-                <Shield className="w-3 h-3" />
-                {isAdminLoggedIn ? 'Dashboard' : 'Admin'}
+                <Shield className="w-3.5 h-3.5" />
+                <span>{isAdminLoggedIn ? 'Dashboard Admin' : 'Login Admin'}</span>
               </button>
             </div>
           </div>
