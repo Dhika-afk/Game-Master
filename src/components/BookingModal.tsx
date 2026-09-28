@@ -57,8 +57,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   // Find currently selected product object
   const currentProduct = activeProducts.find(p => p.id === selectedProductId) || activeProducts[0];
 
-  // Duration prices for current product
-  const availablePrices = currentProduct?.prices || [];
+  // Duration prices for current product (supporting Supabase price & price_unit)
+  const availablePrices = (currentProduct?.prices && currentProduct.prices.length > 0)
+    ? currentProduct.prices
+    : currentProduct?.price
+      ? [{ id: `pr-${currentProduct.id}`, duration: currentProduct.price_unit || '1 Hari', price: Number(currentProduct.price), sortOrder: 1 }]
+      : [];
 
   // Update duration when product changes if current duration isn't in new product
   useEffect(() => {
@@ -77,7 +81,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   // Determine current price value
   const matchedPriceObj = availablePrices.find(p => p.duration === selectedDuration) || availablePrices[0];
-  const calculatedPrice = matchedPriceObj ? matchedPriceObj.price : 0;
+  const calculatedPrice = matchedPriceObj ? matchedPriceObj.price : (Number(currentProduct?.price) || 0);
 
   // Compute end date suggestion based on duration
   useEffect(() => {

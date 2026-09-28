@@ -10,11 +10,15 @@ import {
   Check,
   X,
   AlertCircle,
-  Gamepad2
+  Gamepad2,
+  DollarSign,
+  Package,
+  Layers
 } from 'lucide-react';
 import { Product, CategoryType } from '../../../types.js';
 import { createProductApi, updateProductApi, deleteProductApi } from '../../../api.js';
 import { formatRupiah, getLowestPrice } from '../../../utils/formatters.js';
+import { ProductImageUploader } from '../ProductImageUploader.js';
 
 interface CatalogViewProps {
   products: Product[];
@@ -41,6 +45,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
   // Form states
   const [name, setName] = useState('');
   const [category, setCategory] = useState<CategoryType>('PS4');
+  const [price, setPrice] = useState<number>(90000);
+  const [priceUnit, setPriceUnit] = useState<string>('per hari');
+  const [status, setStatus] = useState<'available' | 'rented' | 'maintenance'>('available');
+  const [stock, setStock] = useState<number>(1);
   const [mainImage, setMainImage] = useState('');
   const [badge, setBadge] = useState('');
   const [shortDesc, setShortDesc] = useState('');
@@ -56,6 +64,10 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
     setEditingProduct(null);
     setName('');
     setCategory('PS4');
+    setPrice(90000);
+    setPriceUnit('per hari');
+    setStatus('available');
+    setStock(2);
     setMainImage('/images/ps4.jpg');
     setBadge('READY UNIT');
     setShortDesc('Paket rental console siap main dengan stick wireless dan game terupdate.');
@@ -72,9 +84,13 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
     setEditingProduct(p);
     setName(p.name);
     setCategory(p.category);
-    setMainImage(p.mainImage);
+    setPrice(p.price || p.prices?.[0]?.price || 90000);
+    setPriceUnit(p.price_unit || p.prices?.[0]?.duration || 'per hari');
+    setStatus(p.status || (p.isActive ? 'available' : 'maintenance'));
+    setStock(p.stock !== undefined ? p.stock : 1);
+    setMainImage(p.mainImage || p.image || '');
     setBadge(p.badge || '');
-    setShortDesc(p.shortDesc || '');
+    setShortDesc(p.shortDesc || p.short_description || '');
     setDescription(p.description || '');
     setIncludedItems((p.includedItems || []).join('\n'));
     setFeatures((p.features || []).join('\n'));
@@ -96,13 +112,19 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
       const payload: Partial<Product> = {
         name: name.trim(),
         category,
+        price: Number(price) || 0,
+        price_unit: priceUnit.trim() || 'per hari',
+        status,
+        stock: Number(stock) || 1,
         mainImage: mainImage.trim(),
+        image: mainImage.trim(),
         badge: badge.trim() || undefined,
         shortDesc: shortDesc.trim(),
+        short_description: shortDesc.trim(),
         description: description.trim(),
         includedItems: includedItems.split('\n').map(s => s.trim()).filter(Boolean),
         features: features.split('\n').map(s => s.trim()).filter(Boolean),
-        isActive,
+        isActive: status !== 'maintenance' && isActive,
         sortOrder: Number(sortOrder) || 1
       };
 
@@ -111,12 +133,11 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
       } else {
         // default starter prices
         payload.prices = [
-          { id: `pr-${Date.now()}-1`, duration: '1 Hari', price: 110000, label: 'Tarif Harian' },
-          { id: `pr-${Date.now()}-2`, duration: '2 Hari', price: 180000, label: 'Tarif 2 Hari' },
-          { id: `pr-${Date.now()}-3`, duration: '1 Minggu', price: 500000, label: 'Paket Mingguan' }
+          { id: `pr-${Date.now()}-1`, duration: priceUnit || '1 Hari', price: Number(price) || 90000, label: 'Tarif Harian' }
         ];
         await createProductApi(payload as any);
       }
+
 
       setModalOpen(false);
       onProductsUpdated();
@@ -188,10 +209,20 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
                   alt={p.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-3 left-3 flex gap-1.5">
+                <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
                   {p.badge && (
                     <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-emerald-500 text-neutral-950">
                       {p.badge}
+                    </span>
+                  )}
+                  {p.status === 'rented' && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-500 text-white shadow">
+                      Disewa
+                    </span>
+                  )}
+                  {p.status === 'maintenance' && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500 text-neutral-950 shadow">
+                      Maintenance
                     </span>
                   )}
                   {!p.isActive && (
@@ -200,8 +231,15 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
                     </span>
                   )}
                 </div>
-                <div className="absolute top-3 right-3 px-2 py-0.5 rounded bg-neutral-950/80 text-[10px] font-semibold text-neutral-300">
-                  {p.category}
+                <div className="absolute top-3 right-3 flex items-center gap-1">
+                  <span className="px-2 py-0.5 rounded bg-neutral-950/80 text-[10px] font-semibold text-neutral-300">
+                    {p.category}
+                  </span>
+                  {p.stock !== undefined && (
+                    <span className="px-2 py-0.5 rounded bg-neutral-900/90 text-[10px] font-mono font-bold text-neutral-300 border border-neutral-800">
+                      Stok: {p.stock}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -316,24 +354,77 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-neutral-300 uppercase mb-1 flex items-center gap-1.5">
-                  <Image className="w-3.5 h-3.5 text-emerald-400" />
-                  URL Foto Produk *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={mainImage}
-                  onChange={(e) => setMainImage(e.target.value)}
-                  placeholder="/images/ps4.jpg"
-                  className="w-full px-3.5 py-2 rounded-xl bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
-                />
-                {mainImage && (
-                  <div className="mt-2 w-32 h-20 rounded-lg overflow-hidden border border-neutral-800 bg-neutral-950">
-                    <img src={mainImage} alt="Preview" className="w-full h-full object-cover" />
-                  </div>
-                )}
+              <ProductImageUploader
+                currentImageUrl={mainImage}
+                onImageUploaded={(url) => setMainImage(url)}
+                label="Foto Produk (Upload Langsung & Auto-Kompres)"
+                required
+              />
+
+              {/* Price & Price Unit & Status & Stock */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-neutral-950 border border-neutral-800">
+                <div>
+                  <label className="block text-xs font-bold text-neutral-300 uppercase mb-1 flex items-center gap-1.5">
+                    <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+                    Harga Sewa (Rp) *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min={0}
+                    step={1000}
+                    value={price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    placeholder="90000"
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-750 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-neutral-300 uppercase mb-1">
+                    Satuan Tarif *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={priceUnit}
+                    onChange={(e) => setPriceUnit(e.target.value)}
+                    placeholder="per hari"
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-750 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-neutral-300 uppercase mb-1 flex items-center gap-1.5">
+                    <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                    Status Unit *
+                  </label>
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as any)}
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-750 text-sm text-white focus:outline-none focus:border-emerald-500"
+                  >
+                    <option value="available">Tersedia (Available)</option>
+                    <option value="rented">Sedang Disewa (Rented)</option>
+                    <option value="maintenance">Maintenance</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-neutral-300 uppercase mb-1 flex items-center gap-1.5">
+                    <Package className="w-3.5 h-3.5 text-emerald-400" />
+                    Stok Unit *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min={0}
+                    value={stock}
+                    onChange={(e) => setStock(Number(e.target.value))}
+                    placeholder="1"
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-750 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

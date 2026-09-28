@@ -8,10 +8,14 @@ import {
   DollarSign,
   Gamepad2,
   Phone,
-  ArrowUpRight
+  ArrowUpRight,
+  Database,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
 import { AdminStats, Booking } from '../../../types.js';
 import { formatRupiah, getStatusBadge } from '../../../utils/formatters.js';
+import { isSupabaseConfigured } from '../../../lib/supabase.js';
 
 interface DashboardViewProps {
   stats: AdminStats | null;
@@ -97,6 +101,49 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, onNavigateT
           </button>
         </div>
       </div>
+
+      {/* Supabase Connection Banner */}
+      {isSupabaseConfigured() ? (
+        <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 border border-emerald-500/30">
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-white block">
+                Database Supabase Terhubung & Realtime Aktif
+              </span>
+              <span className="text-[11px] text-emerald-400">
+                Data produk tersimpan di tabel <code className="font-mono bg-neutral-900 px-1 py-0.5 rounded text-white">products</code> & pesanan di tabel <code className="font-mono bg-neutral-900 px-1 py-0.5 rounded text-white">orders</code>.
+              </span>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold flex items-center gap-1.5 flex-shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Cloud Synced
+          </span>
+        </div>
+      ) : (
+        <div className="p-4 rounded-2xl bg-neutral-900/90 border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0 border border-amber-500/30">
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-white block">
+                Mode Fallback / Preview Lokal Aktif
+              </span>
+              <span className="text-[11px] text-neutral-400">
+                Untuk menghubungkan database permanen Supabase & upload Storage, tambahkan <code className="font-mono text-amber-300">VITE_SUPABASE_URL</code> dan <code className="font-mono text-amber-300">VITE_SUPABASE_ANON_KEY</code>. Skrip SQL tersedia di folder <code className="font-mono text-blue-400">supabase/schema.sql</code>.
+              </span>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold flex items-center gap-1.5 flex-shrink-0">
+            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+            Siap Dihubungkan
+          </span>
+        </div>
+      )}
 
       {/* Stats Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

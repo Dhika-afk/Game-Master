@@ -17,7 +17,92 @@ import {
   INITIAL_MEDIA
 } from './data/initialData.js';
 
+import {
+  isSupabaseConfigured,
+  fetchSupabaseProducts,
+  createSupabaseProduct,
+  updateSupabaseProduct,
+  deleteSupabaseProduct,
+  fetchSupabaseOrders,
+  createSupabaseOrder,
+  updateSupabaseOrderStatus,
+  deleteSupabaseOrder,
+  SupabaseProduct,
+  SupabaseOrder
+} from './lib/supabase.js';
+
 const API_BASE = '/api';
+
+export function isUUID(str?: string | null): boolean {
+  if (!str) return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str);
+}
+
+export function mapSupabaseProductToProduct(sp: SupabaseProduct): Product {
+  const primaryPrice = Number(sp.price) || 0;
+  const priceUnit = sp.price_unit || 'per hari';
+  return {
+    id: sp.id,
+    slug: sp.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    name: sp.name,
+    category: (sp.category as any) || 'PS4',
+    shortDesc: sp.short_description || sp.description || '',
+    description: sp.description || '',
+    badge: sp.badge || undefined,
+    mainImage: sp.image,
+    thumbnail: sp.image,
+    galleryImages: [sp.image],
+    includedItems: ['1x Unit Console', '2x Stick Wireless Original', 'Kabel HDMI & Power', 'Full Game Terupdate'],
+    features: ['Rental PlayStation', 'Antar–jemput', 'Wilayah Mataram', 'Unit Terawat'],
+    isActive: sp.status !== 'maintenance',
+    isPopular: sp.badge?.toLowerCase().includes('populer') || false,
+    sortOrder: sp.sort_order || 0,
+    price: primaryPrice,
+    price_unit: priceUnit,
+    status: sp.status,
+    stock: sp.stock,
+    short_description: sp.short_description,
+    image: sp.image,
+    created_at: sp.created_at,
+    prices: [
+      {
+        id: `pr-${sp.id}`,
+        duration: priceUnit,
+        price: primaryPrice,
+        label: sp.badge || undefined,
+        sortOrder: 1
+      }
+    ]
+  };
+}
+
+export function mapSupabaseOrderToBooking(o: SupabaseOrder): Booking {
+  const statusMap: Record<string, Booking['status']> = {
+    pending: 'Pending',
+    paid: 'Confirmed',
+    ongoing: 'On Rental',
+    completed: 'Completed',
+    cancelled: 'Cancelled'
+  };
+
+  return {
+    id: o.id,
+    bookingId: 'GM-' + o.id.replace(/-/g, '').substring(0, 8).toUpperCase(),
+    customerName: o.customer_name,
+    customerPhone: o.customer_phone,
+    customerAddress: o.notes?.includes('Alamat:') ? o.notes.split('Alamat:')[1].split('.')[0].trim() : 'Mataram',
+    productId: o.product_id || '',
+    productName: o.products?.name || 'PlayStation Rental',
+    duration: `${o.duration} Hari`,
+    price: Number(o.total_price) || 0,
+    startDate: o.start_date,
+    endDate: o.end_date,
+    notes: o.notes || '',
+    status: statusMap[o.status] || 'Pending',
+    createdAt: o.created_at || new Date().toISOString(),
+    adminNotes: ''
+  };
+}
 
 // Helper to ensure image paths are strictly absolute starting with /images/
 function normalizeProductImage(src?: string, fallback = '/images/logo.jpg'): string {
@@ -38,6 +123,23 @@ function sanitizeProduct(product: Product): Product {
 }
 
 export async function fetchProducts(): Promise<Product[]> {
+  // 1. Try Supabase first if configured
+  if (isSupabaseConfigured()) {
+    try {
+      const sps = await fetchSupabaseProducts();
+      if (sps && sps.length > 0) {
+        const mapped = sps.map(mapSupabaseProductToProduct);
+        try {
+          localStorage.setItem('gm_cached_products', JSON.stringify(mapped));
+        } catch {}
+        return mapped;
+      }
+    } catch (err) {
+      console.warn('Supabase fetchProducts notice:', err);
+    }
+  }
+
+  // 2. Try Local API
   try {
     const res = await fetch(`${API_BASE}/products`);
     if (res.ok) {
@@ -46,17 +148,15 @@ export async function fetchProducts(): Promise<Product[]> {
         const sanitized = data.map(sanitizeProduct);
         try {
           localStorage.setItem('gm_cached_products', JSON.stringify(sanitized));
-        } catch {
-          // ignore localStorage error
-        }
+        } catch {}
         return sanitized;
       }
     }
   } catch (err) {
-    console.warn('API /api/products tidak terhubung (misal di Vercel static), menggunakan data fallback katalog lokal.');
+    // ignore
   }
 
-  // Fallback to localStorage or static INITIAL_PRODUCTS
+  // 3. Fallback to localStorage or static INITIAL_PRODUCTS
   try {
     const cached = localStorage.getItem('gm_cached_products');
     if (cached) {
@@ -65,31 +165,51 @@ export async function fetchProducts(): Promise<Product[]> {
         return parsed.map(sanitizeProduct);
       }
     }
-  } catch {
-    // ignore
-  }
+  } catch {}
 
   return INITIAL_PRODUCTS.map(sanitizeProduct);
 }
 
 export async function fetchProductById(id: string): Promise<Product> {
+  const all = await fetchProducts();
+  const found = all.find(p => p.id === id || p.slug === id);
+  if (found) return found;
+
   try {
     const res = await fetch(`${API_BASE}/products/${id}`);
     if (res.ok) {
       const data = await res.json();
       return sanitizeProduct(data);
     }
-  } catch {
-    // fallback
-  }
+  } catch {}
 
-  const all = await fetchProducts();
-  const found = all.find(p => p.id === id || p.slug === id);
-  if (found) return found;
   throw new Error('Produk tidak ditemukan');
 }
 
 export async function createProductApi(product: Partial<Product>): Promise<Product> {
+  // 1. If Supabase is configured, save directly to Supabase products table
+  if (isSupabaseConfigured()) {
+    try {
+      const sp = await createSupabaseProduct({
+        name: product.name || 'Unit Baru',
+        category: product.category || 'PS4',
+        price: Number(product.price) || (product.prices?.[0]?.price) || 90000,
+        price_unit: product.price_unit || 'per hari',
+        image: product.image || product.mainImage || '/images/ps4.jpg',
+        description: product.description || '',
+        short_description: product.short_description || product.shortDesc || '',
+        badge: product.badge || null,
+        sort_order: Number(product.sortOrder) || 0,
+        status: product.status || (product.isActive ? 'available' : 'maintenance'),
+        stock: Number(product.stock) || 1
+      });
+      return mapSupabaseProductToProduct(sp);
+    } catch (err) {
+      console.warn('Supabase createProduct notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/products`, {
       method: 'POST',
@@ -99,27 +219,38 @@ export async function createProductApi(product: Partial<Product>): Promise<Produ
     if (res.ok) {
       return sanitizeProduct(await res.json());
     }
-  } catch {
-    // fallback
-  }
+  } catch {}
 
+  // 3. Fallback to local state / cache
   const all = await fetchProducts();
   const newProduct: Product = sanitizeProduct({
     id: 'prod-' + Date.now(),
     slug: product.slug || (product.name || 'unit').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
     name: product.name || 'Unit Baru',
     category: product.category || 'PS4',
-    shortDesc: product.shortDesc || '',
+    shortDesc: product.shortDesc || product.short_description || '',
     description: product.description || '',
-    mainImage: normalizeProductImage(product.mainImage, '/images/ps4.jpg'),
-    thumbnail: normalizeProductImage(product.thumbnail, '/images/ps4.jpg'),
-    galleryImages: [normalizeProductImage(product.mainImage, '/images/ps4.jpg')],
+    badge: product.badge,
+    mainImage: normalizeProductImage(product.mainImage || product.image, '/images/ps4.jpg'),
+    thumbnail: normalizeProductImage(product.thumbnail || product.mainImage || product.image, '/images/ps4.jpg'),
+    galleryImages: [normalizeProductImage(product.mainImage || product.image, '/images/ps4.jpg')],
     includedItems: product.includedItems || [],
     features: product.features || [],
     isActive: product.isActive ?? true,
     isPopular: product.isPopular ?? false,
     sortOrder: product.sortOrder || all.length + 1,
-    prices: product.prices || []
+    prices: product.prices || [
+      {
+        id: 'pr-1',
+        duration: product.price_unit || '1 Hari',
+        price: Number(product.price) || 90000,
+        sortOrder: 1
+      }
+    ],
+    price: Number(product.price) || 90000,
+    price_unit: product.price_unit || 'per hari',
+    status: product.status || 'available',
+    stock: Number(product.stock) || 1
   });
 
   all.push(newProduct);
@@ -130,6 +261,37 @@ export async function createProductApi(product: Partial<Product>): Promise<Produ
 }
 
 export async function updateProductApi(id: string, updates: Partial<Product>): Promise<Product> {
+  // 1. If Supabase is configured and it is a UUID, update Supabase
+  if (isSupabaseConfigured() && isUUID(id)) {
+    try {
+      const supabaseUpdates: Partial<SupabaseProduct> = {};
+      if (updates.name !== undefined) supabaseUpdates.name = updates.name;
+      if (updates.category !== undefined) supabaseUpdates.category = updates.category;
+      if (updates.price !== undefined) supabaseUpdates.price = Number(updates.price);
+      if (updates.price_unit !== undefined) supabaseUpdates.price_unit = updates.price_unit;
+      if (updates.mainImage !== undefined || updates.image !== undefined) {
+        supabaseUpdates.image = updates.image || updates.mainImage;
+      }
+      if (updates.description !== undefined) supabaseUpdates.description = updates.description;
+      if (updates.shortDesc !== undefined || updates.short_description !== undefined) {
+        supabaseUpdates.short_description = updates.short_description || updates.shortDesc;
+      }
+      if (updates.badge !== undefined) supabaseUpdates.badge = updates.badge || null;
+      if (updates.sortOrder !== undefined) supabaseUpdates.sort_order = Number(updates.sortOrder);
+      if (updates.status !== undefined) supabaseUpdates.status = updates.status;
+      if (updates.isActive !== undefined && updates.status === undefined) {
+        supabaseUpdates.status = updates.isActive ? 'available' : 'maintenance';
+      }
+      if (updates.stock !== undefined) supabaseUpdates.stock = Number(updates.stock);
+
+      const updated = await updateSupabaseProduct(id, supabaseUpdates);
+      return mapSupabaseProductToProduct(updated);
+    } catch (err) {
+      console.warn('Supabase updateProduct notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/products/${id}`, {
       method: 'PUT',
@@ -139,10 +301,9 @@ export async function updateProductApi(id: string, updates: Partial<Product>): P
     if (res.ok) {
       return sanitizeProduct(await res.json());
     }
-  } catch {
-    // fallback
-  }
+  } catch {}
 
+  // 3. Fallback to local state / cache
   const all = await fetchProducts();
   const idx = all.findIndex(p => p.id === id);
   if (idx !== -1) {
@@ -156,13 +317,23 @@ export async function updateProductApi(id: string, updates: Partial<Product>): P
 }
 
 export async function deleteProductApi(id: string): Promise<{ success: boolean }> {
+  // 1. If Supabase is configured and is UUID, delete from Supabase
+  if (isSupabaseConfigured() && isUUID(id)) {
+    try {
+      await deleteSupabaseProduct(id);
+      return { success: true };
+    } catch (err) {
+      console.warn('Supabase deleteProduct notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
     if (res.ok) return await res.json();
-  } catch {
-    // fallback
-  }
+  } catch {}
 
+  // 3. Fallback to cache
   const all = await fetchProducts();
   const filtered = all.filter(p => p.id !== id);
   try {
@@ -170,6 +341,7 @@ export async function deleteProductApi(id: string): Promise<{ success: boolean }
   } catch {}
   return { success: true };
 }
+
 
 export async function fetchPrices(): Promise<ProductPrice[]> {
   try {
@@ -250,11 +422,29 @@ export async function deletePriceApi(id: string): Promise<{ success: boolean }> 
 }
 
 export async function fetchBookings(): Promise<Booking[]> {
+  // 1. Try Supabase first if configured
+  if (isSupabaseConfigured()) {
+    try {
+      const orders = await fetchSupabaseOrders();
+      if (orders && orders.length > 0) {
+        const mapped = orders.map(mapSupabaseOrderToBooking);
+        try {
+          localStorage.setItem('gm_cached_bookings', JSON.stringify(mapped));
+        } catch {}
+        return mapped;
+      }
+    } catch (err) {
+      console.warn('Supabase fetchOrders notice:', err);
+    }
+  }
+
+  // 2. Try Local API
   try {
     const res = await fetch(`${API_BASE}/bookings`);
     if (res.ok) return await res.json();
   } catch {}
 
+  // 3. Fallback to cache
   try {
     const cached = localStorage.getItem('gm_cached_bookings');
     if (cached) return JSON.parse(cached);
@@ -268,7 +458,7 @@ export async function fetchBookings(): Promise<Booking[]> {
       customerPhone: '081912345678',
       customerAddress: 'Jl. Pemuda No. 12, Mataram',
       productId: 'prod-ps4',
-      productName: 'PS4',
+      productName: 'PlayStation 4 Slim',
       duration: '2 Hari',
       price: 180000,
       startDate: '2026-09-18',
@@ -282,14 +472,15 @@ export async function fetchBookings(): Promise<Booking[]> {
 }
 
 export async function fetchBookingById(id: string): Promise<Booking> {
+  const all = await fetchBookings();
+  const found = all.find(b => b.id === id || b.bookingId.toLowerCase() === id.toLowerCase());
+  if (found) return found;
+
   try {
     const res = await fetch(`${API_BASE}/bookings/${id}`);
     if (res.ok) return await res.json();
   } catch {}
 
-  const all = await fetchBookings();
-  const found = all.find(b => b.id === id || b.bookingId.toLowerCase() === id.toLowerCase());
-  if (found) return found;
   throw new Error('Booking ID tidak ditemukan');
 }
 
@@ -305,6 +496,31 @@ export async function createBookingApi(booking: {
   endDate: string;
   notes?: string;
 }): Promise<Booking> {
+  // 1. If Supabase is configured, create order in Supabase orders table
+  if (isSupabaseConfigured()) {
+    try {
+      const days = parseInt(booking.duration) || 1;
+      const order = await createSupabaseOrder({
+        customer_name: booking.customerName,
+        customer_phone: booking.customerPhone,
+        product_id: isUUID(booking.productId) ? booking.productId : null,
+        start_date: booking.startDate,
+        end_date: booking.endDate,
+        duration: days,
+        total_price: Number(booking.price) || 0,
+        status: 'pending',
+        notes: `${booking.customerAddress ? 'Alamat: ' + booking.customerAddress + '. ' : ''}${booking.notes || ''}`
+      });
+      const mapped = mapSupabaseOrderToBooking(order);
+      mapped.productName = booking.productName || mapped.productName;
+      mapped.customerAddress = booking.customerAddress || mapped.customerAddress;
+      return mapped;
+    } catch (err) {
+      console.warn('Supabase createOrder notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/bookings`, {
       method: 'POST',
@@ -314,6 +530,7 @@ export async function createBookingApi(booking: {
     if (res.ok) return await res.json();
   } catch {}
 
+  // 3. Fallback to local cache
   const all = await fetchBookings();
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -353,6 +570,29 @@ export async function updateBookingStatusApi(
   status: Booking['status'],
   adminNotes?: string
 ): Promise<Booking> {
+  // 1. If Supabase is configured and is UUID, update Supabase orders table
+  if (isSupabaseConfigured() && isUUID(id)) {
+    try {
+      const statusMap: Record<Booking['status'], SupabaseOrder['status']> = {
+        Pending: 'pending',
+        Confirmed: 'paid',
+        'On Rental': 'ongoing',
+        Completed: 'completed',
+        Cancelled: 'cancelled'
+      };
+      await updateSupabaseOrderStatus(id, statusMap[status] || 'pending');
+      const all = await fetchBookings();
+      const found = all.find(b => b.id === id);
+      if (found) {
+        found.status = status;
+        return found;
+      }
+    } catch (err) {
+      console.warn('Supabase updateOrderStatus notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/bookings/${id}/status`, {
       method: 'PUT',
@@ -362,6 +602,7 @@ export async function updateBookingStatusApi(
     if (res.ok) return await res.json();
   } catch {}
 
+  // 3. Fallback to cache
   const all = await fetchBookings();
   const found = all.find(b => b.id === id || b.bookingId === id);
   if (found) {
@@ -376,11 +617,23 @@ export async function updateBookingStatusApi(
 }
 
 export async function deleteBookingApi(id: string): Promise<{ success: boolean }> {
+  // 1. If Supabase is configured and is UUID, delete from Supabase orders
+  if (isSupabaseConfigured() && isUUID(id)) {
+    try {
+      await deleteSupabaseOrder(id);
+      return { success: true };
+    } catch (err) {
+      console.warn('Supabase deleteOrder notice, using fallback:', err);
+    }
+  }
+
+  // 2. Fallback to Local API
   try {
     const res = await fetch(`${API_BASE}/bookings/${id}`, { method: 'DELETE' });
     if (res.ok) return await res.json();
   } catch {}
 
+  // 3. Fallback to cache
   const all = await fetchBookings();
   const filtered = all.filter(b => b.id !== id && b.bookingId !== id);
   try {

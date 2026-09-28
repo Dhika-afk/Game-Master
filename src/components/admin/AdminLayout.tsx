@@ -13,8 +13,10 @@ import {
   Shield,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  Database
 } from 'lucide-react';
+import { isSupabaseConfigured } from '../../lib/supabase.js';
 import {
   Booking,
   Product,
@@ -190,6 +192,25 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               </div>
             </div>
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+          </div>
+
+          {/* Supabase Status Pill */}
+          <div className="mx-3 mb-3 px-3 py-1.5 rounded-lg bg-neutral-950/60 border border-neutral-800/80 flex items-center justify-between text-[11px]">
+            <div className="flex items-center gap-1.5">
+              <Database className="w-3.5 h-3.5 text-neutral-400" />
+              <span className="text-neutral-400 font-medium">Database:</span>
+            </div>
+            {isSupabaseConfigured() ? (
+              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Supabase
+              </span>
+            ) : (
+              <span className="text-amber-400 font-semibold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                Local Mock
+              </span>
+            )}
           </div>
 
           {/* Navigation Links */}

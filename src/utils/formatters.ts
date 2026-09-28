@@ -20,6 +20,7 @@ export function formatCompactRupiah(amount: number): string {
 }
 
 export function getLowestPrice(product: Product): number {
+  if (product.price && product.price > 0) return Number(product.price);
   if (!product.prices || product.prices.length === 0) return 0;
   return Math.min(...product.prices.map(p => p.price));
 }

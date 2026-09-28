@@ -37,6 +37,14 @@ export interface Product {
   isActive: boolean;
   sortOrder: number;
   prices?: ProductPrice[];
+  // Supabase specific fields
+  price?: number;
+  price_unit?: string;
+  status?: 'available' | 'rented' | 'maintenance';
+  stock?: number;
+  short_description?: string;
+  image?: string;
+  created_at?: string;
 }
 
 export type BookingStatus = 'Pending' | 'Confirmed' | 'On Rental' | 'Completed' | 'Cancelled';

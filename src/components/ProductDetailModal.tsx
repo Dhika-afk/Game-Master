@@ -16,15 +16,26 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   if (!product) return null;
 
+  const derivedPrices: ProductPrice[] = (product.prices && product.prices.length > 0)
+    ? product.prices
+    : product.price
+      ? [{ id: `pr-${product.id}`, duration: product.price_unit || '1 Hari', price: Number(product.price), sortOrder: 1 }]
+      : [];
+
   const [activeImage, setActiveImage] = useState<string>(product.mainImage);
   const [selectedPrice, setSelectedPrice] = useState<ProductPrice | null>(
-    product.prices && product.prices.length > 0 ? product.prices[0] : null
+    derivedPrices.length > 0 ? derivedPrices[0] : null
   );
 
   React.useEffect(() => {
     if (product) {
       setActiveImage(product.mainImage);
-      setSelectedPrice(product.prices && product.prices.length > 0 ? product.prices[0] : null);
+      const prs = (product.prices && product.prices.length > 0)
+        ? product.prices
+        : product.price
+          ? [{ id: `pr-${product.id}`, duration: product.price_unit || '1 Hari', price: Number(product.price), sortOrder: 1 }]
+          : [];
+      setSelectedPrice(prs.length > 0 ? prs[0] : null);
     }
   }, [product]);
 
@@ -162,8 +173,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   Pilihan Durasi & Tarif:
                 </h4>
                 <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
-                  {product.prices && product.prices.length > 0 ? (
-                    product.prices.map((pr) => {
+                  {derivedPrices.length > 0 ? (
+                    derivedPrices.map((pr) => {
                       const isSelected = selectedPrice?.id === pr.id;
                       return (
                         <div
