@@ -21,6 +21,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     product.prices && product.prices.length > 0 ? product.prices[0] : null
   );
 
+  React.useEffect(() => {
+    if (product) {
+      setActiveImage(product.mainImage);
+      setSelectedPrice(product.prices && product.prices.length > 0 ? product.prices[0] : null);
+    }
+  }, [product]);
+
   const images = product.galleryImages && product.galleryImages.length > 0
     ? product.galleryImages
     : [product.mainImage];
@@ -62,6 +69,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <img
                   src={activeImage}
                   alt={product.name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/logo.jpg';
+                  }}
                   className="w-full h-full object-cover object-center"
                 />
                 {product.badge && (

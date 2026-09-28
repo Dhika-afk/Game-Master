@@ -9,13 +9,13 @@ export const initialProducts: Product[] = [
     shortDesc: 'PlayStation 4 Rental Original & Terawat',
     description: 'Unit PlayStation 4 Slim performa maksimal dengan pendingin optimal. Sudah dilengkapi game-game terpopuler terbaru seperti eFootball / FC 24, GTA V, God of War, Mortal Kombat 11, dan game multiplayer seru.',
     badge: 'Paling Populer',
-    mainImage: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps4.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1507457379470-08b800bebc67?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps4.jpg',
+      '/images/ps4-controller.jpg',
+      '/images/ps4-games.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps4.jpg',
     includedItems: [
       '1x Console PlayStation 4 Slim',
       '2x Stick DualShock 4 Wireless Original',
@@ -41,13 +41,13 @@ export const initialProducts: Product[] = [
     shortDesc: 'Paket Komplit PS4 + TV LED 32 Inch Siap Main',
     description: 'Solusi lengkap anti ribet untuk kosan, villa, atau rumah tanpa TV. Dapat 1 unit PS4 beserta TV LED 32 inch gambar jernih HD, kabel lengkap, tinggal colok dan main bersama teman.',
     badge: 'Paket Hemat',
-    mainImage: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps4-tv.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps4-tv.jpg',
+      '/images/gaming-room.jpg',
+      '/images/ps4.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps4-tv.jpg',
     includedItems: [
       '1x Console PlayStation 4 Slim',
       '1x TV LED 32 Inch Crystal Clear HD',
@@ -73,12 +73,12 @@ export const initialProducts: Product[] = [
     shortDesc: 'PlayStation 4 Hardcase Box Travel Edition',
     description: 'Paket rental PS4 dengan hardcase box protektif premium. Sangat praktis dan aman untuk dibawa bepergian, gathering, camping, atau acara kantor di Mataram & Lombok.',
     badge: 'Travel Edition',
-    mainImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps4-box.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps4-box.jpg',
+      '/images/ps4.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps4-box.jpg',
     includedItems: [
       '1x Hardcase Box Eksklusif & Busa Pelindung',
       '1x Console PlayStation 4',
@@ -104,12 +104,12 @@ export const initialProducts: Product[] = [
     shortDesc: 'PlayStation 3 Rental Murah & Penuh Game',
     description: 'Pilihan sewa paling terjangkau dengan ratusan game seru! Cocok untuk seru-seruan bareng teman kosan dengan game ikonik seperti PES, GTA San Andreas, Need for Speed, Naruto Shippuden, dan Tekken.',
     badge: 'Best Value',
-    mainImage: 'https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps3.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1507457379470-08b800bebc67?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps3.jpg',
+      '/images/ps4-controller.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps3.jpg',
     includedItems: [
       '1x Console PlayStation 3 Slim/Super Slim',
       '2x Stick Wireless DualShock 3',
@@ -135,12 +135,12 @@ export const initialProducts: Product[] = [
     shortDesc: 'Paket Hemat PS3 + TV LED 32 Inch',
     description: 'Sewa PS3 komplit dengan TV LED 32 inch. Solusi gaming santai dan hemat di tempat tinggal Anda tanpa perlu pusing mencari layar TV.',
     badge: 'Hemat Banget',
-    mainImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps3-tv.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1526509867162-5b0c0d1b4b33?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps3-tv.jpg',
+      '/images/ps3.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps3-tv.jpg',
     includedItems: [
       '1x Console PS3 Slim',
       '1x TV LED 32 Inch HD',
@@ -166,11 +166,11 @@ export const initialProducts: Product[] = [
     shortDesc: 'PlayStation 3 Hardcase Box Portable',
     description: 'Unit PS3 dalam kemasan koper box pelindung tebal. Mudah dibawa mobile ke mana saja dengan perlindungan maksimal.',
     badge: 'Mobile Box',
-    mainImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps3-box.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps3-box.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps3-box.jpg',
     includedItems: [
       '1x Koper Box Khusus PS3',
       '1x Console PS3 Slim',
@@ -195,12 +195,12 @@ export const initialProducts: Product[] = [
     shortDesc: 'Nintendo Switch Hybrid Party Console',
     description: 'Konsol hybrid idaman! Bisa dimainkan secara portable handheld atau dihubungkan ke TV. Cocok sekali untuk mabar seru bareng teman atau keluarga dengan Mario Kart 8 Deluxe, Super Smash Bros, Zelda, dan Overcooked.',
     badge: 'Mabar Seru',
-    mainImage: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/switch.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1612287233215-66798c56641b?auto=format&fit=crop&w=1000&q=80'
+      '/images/switch.jpg',
+      '/images/switch-lite.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/switch.jpg',
     includedItems: [
       '1x Nintendo Switch Tablet Console',
       '1x Pasang Joy-Con (Left & Right)',
@@ -227,11 +227,11 @@ export const initialProducts: Product[] = [
     shortDesc: 'Konsol Portable Ringan Praktis',
     description: 'Edisi ringkas dan ringan didesain khusus untuk permainan handheld personal. Baterai awet, nyaman digenggam saat rebahan di kamar atau perjalanan santai.',
     badge: 'Compact & Fun',
-    mainImage: 'https://images.unsplash.com/photo-1612287233215-66798c56641b?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/switch-lite.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1612287233215-66798c56641b?auto=format&fit=crop&w=1000&q=80'
+      '/images/switch-lite.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1612287233215-66798c56641b?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/switch-lite.jpg',
     includedItems: [
       '1x Nintendo Switch Lite Unit',
       '1x AC Adapter Charger Cepat',
@@ -256,11 +256,11 @@ export const initialProducts: Product[] = [
     shortDesc: 'PlayStation 2 Nostalgia Legend',
     description: 'Kembali ke masa kejayaan game klasik rental dengan PlayStation 2. Ratusan game legendaris masa kecil seperti GTA San Andreas, Winning Eleven, Downhill Domination, Basara, Guitar Hero, dan Bully.',
     badge: 'Nostalgia Legend',
-    mainImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/ps2.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80'
+      '/images/ps2.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/ps2.jpg',
     includedItems: [
       '1x Console PlayStation 2 Slim',
       '2x Stick PS2 Analog',
@@ -286,11 +286,11 @@ export const initialProducts: Product[] = [
     shortDesc: 'TV LED 32 Inch HD Crystal Clear',
     description: 'Sewa TV LED 32 Inch jernih dengan port HDMI lengkap, refresh rate responsif untuk gaming, speaker stereo mantap, dan kaki standing kokoh.',
     badge: 'Unit Jernih',
-    mainImage: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80',
+    mainImage: '/images/tv-32.jpg',
     galleryImages: [
-      'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80'
+      '/images/tv-32.jpg'
     ],
-    thumbnail: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=400&q=80',
+    thumbnail: '/images/tv-32.jpg',
     includedItems: [
       '1x TV LED 32 Inch HD',
       '1x Remote Control + Baterai',
@@ -378,7 +378,7 @@ export const initialHeroVideos: HeroVideo[] = [
     title: 'PlayStation & Next-Gen Gaming',
     subtitle: 'Main Seru, Tinggal Booking.',
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-playing-a-video-game-with-a-controller-41975-large.mp4',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1600&q=80',
+    thumbnailUrl: '/images/hero-1.jpg',
     isActive: true,
     sortOrder: 1
   },
@@ -387,7 +387,7 @@ export const initialHeroVideos: HeroVideo[] = [
     title: 'Setup Rental Komplit & Siap Antar',
     subtitle: 'Layanan Rental PlayStation Terpercaya di Mataram & Sekitarnya',
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-young-gamer-playing-video-games-with-a-headset-41974-large.mp4',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80',
+    thumbnailUrl: '/images/hero-2.jpg',
     isActive: true,
     sortOrder: 2
   },
@@ -396,7 +396,7 @@ export const initialHeroVideos: HeroVideo[] = [
     title: 'Party Games & Mabar Nintendo Switch',
     subtitle: 'Koleksi Game Lengkap Untuk Semua Momen Seru',
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-friends-playing-a-video-game-in-the-living-room-41976-large.mp4',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1600&q=80',
+    thumbnailUrl: '/images/hero-3.jpg',
     isActive: true,
     sortOrder: 3
   }
@@ -406,7 +406,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-1',
     customerName: 'Rizky Pratama',
-    customerPhoto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-1.jpg',
     rating: 5,
     comment: 'PS-nya bersih, controller lengkap dan proses booking cepat. Diantar tepat waktu ke kosan di Gomong. Stick original empuk!',
     date: '18 September 2026',
@@ -418,7 +418,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-2',
     customerName: 'Dimas Setiawan',
-    customerPhoto: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-2.jpg',
     rating: 5,
     comment: 'Sewa paket PS4 + TV 32 inch buat malam mingguan bareng teman. Praktis tinggal colok kabel, gambarnya jernih dan game bolanya update.',
     date: '15 September 2026',
@@ -430,7 +430,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-3',
     customerName: 'Sarah Amalia',
-    customerPhoto: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-3.jpg',
     rating: 5,
     comment: 'Nintendo Switch-nya mulus seperti baru! Mario Kart sama Overcooked seru banget buat mabar sama keluarga. Admin ramah dan fast respon.',
     date: '12 September 2026',
@@ -442,7 +442,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-4',
     customerName: 'Hendra Gunawan',
-    customerPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-4.jpg',
     rating: 5,
     comment: 'Langganan setia tiap libur semester. Sewa seminggu harganya hemat parah. Unit tidak pernah overheat sama sekali. Mantap Game Master!',
     date: '8 September 2026',
@@ -454,7 +454,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-5',
     customerName: 'Fauzi Rahman',
-    customerPhoto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-5.jpg',
     rating: 5,
     comment: 'Booking via website gampang banget, langsung terkoneksi ke WhatsApp admin. Kurirnya tepat janji pas jemput unit. 10/10 service!',
     date: '3 September 2026',
@@ -466,7 +466,7 @@ export const initialReviews: CustomerReview[] = [
   {
     id: 'rev-6',
     customerName: 'Bagus Wicaksono',
-    customerPhoto: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
+    customerPhoto: '/images/avatar-6.jpg',
     rating: 4,
     comment: 'Nostalgia main PS2 Downhill dan Basara bareng ponakan. Alat lengkap kabel converter HDMI-nya berfungsi dengan baik.',
     date: '28 Agustus 2026',
@@ -479,7 +479,7 @@ export const initialReviews: CustomerReview[] = [
 
 export const initialSettings: WebsiteSettings = {
   businessName: 'GAME MASTER MATARAM',
-  logoUrl: '/logo.jpg',
+  logoUrl: '/images/logo.jpg',
   tagline: '"Your Game is Game Master"',
   description: 'Rental PlayStation dan gaming console terpercaya di Mataram dan sekitarnya.',
   locationArea: 'Mataram dan sekitarnya',
@@ -517,7 +517,7 @@ export const initialMedia: MediaItem[] = [
     id: 'med-1',
     title: 'PlayStation 4 Slim Main Photo',
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/media-1.jpg',
     category: 'product',
     createdAt: '2026-09-01T00:00:00Z'
   },
@@ -525,7 +525,7 @@ export const initialMedia: MediaItem[] = [
     id: 'med-2',
     title: 'DualShock 4 Controller Setup',
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1507457379470-08b800bebc67?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/media-2.jpg',
     category: 'product',
     createdAt: '2026-09-01T00:00:00Z'
   },
@@ -533,7 +533,7 @@ export const initialMedia: MediaItem[] = [
     id: 'med-3',
     title: 'Paket PS4 + TV 32 Inch',
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/media-3.jpg',
     category: 'product',
     createdAt: '2026-09-01T00:00:00Z'
   },
@@ -541,7 +541,7 @@ export const initialMedia: MediaItem[] = [
     id: 'med-4',
     title: 'Nintendo Switch Setup',
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/media-4.jpg',
     category: 'product',
     createdAt: '2026-09-01T00:00:00Z'
   },
@@ -549,7 +549,7 @@ export const initialMedia: MediaItem[] = [
     id: 'med-5',
     title: 'Gaming Room Showcase',
     type: 'image',
-    url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
+    url: '/images/media-5.jpg',
     category: 'hero',
     createdAt: '2026-09-01T00:00:00Z'
   }

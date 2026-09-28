@@ -155,6 +155,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                       src={product.mainImage}
                       alt={product.name}
                       loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/logo.jpg';
+                      }}
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60"></div>

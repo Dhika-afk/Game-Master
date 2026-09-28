@@ -49,7 +49,7 @@ export default function App() {
   const [reviews, setReviews] = useState<CustomerReview[]>([]);
   const [settings, setSettings] = useState<WebsiteSettings>({
     businessName: 'GAME MASTER MATARAM',
-    logoUrl: '/logo.jpg',
+    logoUrl: '/images/logo.jpg',
     tagline: '"Your Game is Game Master"',
     description: 'Rental PlayStation dan gaming console terpercaya di Mataram dan sekitarnya.',
     locationArea: 'Mataram dan sekitarnya',

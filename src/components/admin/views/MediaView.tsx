@@ -97,7 +97,14 @@ export const MediaView: React.FC<MediaViewProps> = ({ media, onMediaUpdated }) =
               {item.type === 'video' ? (
                 <video src={item.url} muted playsInline className="w-full h-full object-cover" />
               ) : (
-                <img src={item.url} alt={item.title} className="w-full h-full object-cover" />
+                <img
+                  src={item.url}
+                  alt={item.title}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/logo.jpg';
+                  }}
+                  className="w-full h-full object-cover"
+                />
               )}
               <div className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-neutral-950/80 text-emerald-400 border border-neutral-800">
                 {item.type}
@@ -224,11 +231,11 @@ export const MediaView: React.FC<MediaViewProps> = ({ media, onMediaUpdated }) =
                   URL Aset (Public URL) *
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   required
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="/images/ps4.jpg"
                   className="w-full px-3.5 py-2 rounded-xl bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
                 />
               </div>

@@ -135,8 +135,11 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               {/* Author Info */}
               <div className="flex items-center gap-3 pt-4 border-t border-neutral-850">
                 <img
-                  src={rev.customerPhoto || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(rev.customerName)}`}
+                  src={rev.customerPhoto || '/images/avatar-1.jpg'}
                   alt={rev.customerName}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/avatar-1.jpg';
+                  }}
                   className="w-10 h-10 rounded-full object-cover border border-neutral-800 bg-neutral-900"
                 />
                 <div>

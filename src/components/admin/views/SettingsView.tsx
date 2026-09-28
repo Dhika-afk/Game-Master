@@ -114,9 +114,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, onSettings
                 </label>
                 <input
                   type="text"
-                  value={formData.logoUrl || '/logo.jpg'}
+                  value={formData.logoUrl || '/images/logo.jpg'}
                   onChange={(e) => handleChange('logoUrl', e.target.value)}
-                  placeholder="/logo.jpg"
+                  placeholder="/images/logo.jpg"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-sm text-white font-mono focus:outline-none focus:border-emerald-500"
                 />
               </div>

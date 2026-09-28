@@ -28,7 +28,7 @@ export const Logo: React.FC<LogoProps> = ({
         className={`relative overflow-hidden bg-black border border-neutral-800 shadow-lg shadow-black/60 flex items-center justify-center ${sizeClasses[size]}`}
       >
         <img
-          src="/logo.jpg"
+          src="/images/logo.jpg"
           alt="GAME MASTER Logo"
           referrerPolicy="no-referrer"
           className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${imgClassName}`}

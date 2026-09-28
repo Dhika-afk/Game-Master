@@ -56,7 +56,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
     setEditingProduct(null);
     setName('');
     setCategory('PS4');
-    setMainImage('https://images.unsplash.com/photo-1507457379470-08b800bebc67?auto=format&fit=crop&w=800&q=80');
+    setMainImage('/images/ps4.jpg');
     setBadge('READY UNIT');
     setShortDesc('Paket rental console siap main dengan stick wireless dan game terupdate.');
     setDescription('Paket rental PlayStation lengkap dengan kabel power, HDMI, kabel charger stick, dan game pilihan.');
@@ -322,11 +322,11 @@ export const CatalogView: React.FC<CatalogViewProps> = ({ products, onProductsUp
                   URL Foto Produk *
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   required
                   value={mainImage}
                   onChange={(e) => setMainImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="/images/ps4.jpg"
                   className="w-full px-3.5 py-2 rounded-xl bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
                 />
                 {mainImage && (

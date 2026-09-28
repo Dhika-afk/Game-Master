@@ -38,7 +38,7 @@ export const HeroVideosView: React.FC<HeroVideosViewProps> = ({ videos, onVideos
     setTitle('Rental Console Mataram');
     setSubtitle('Main Seru, Tinggal Booking.');
     setVideoUrl('https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-playing-a-video-game-with-a-controller-41975-large.mp4');
-    setThumbnailUrl('https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1600&q=80');
+    setThumbnailUrl('/images/hero-1.jpg');
     setIsActive(true);
     setSortOrder(videos.length + 1);
     setModalOpen(true);
@@ -273,10 +273,10 @@ export const HeroVideosView: React.FC<HeroVideosViewProps> = ({ videos, onVideos
                   URL Poster / Thumbnail Cadangan
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   value={thumbnailUrl}
                   onChange={(e) => setThumbnailUrl(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="/images/hero-1.jpg"
                   className="w-full px-3.5 py-2 rounded-xl bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
                 />
               </div>

@@ -27,7 +27,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     title: settings.heroTitle || 'GAME MASTER MATARAM',
     subtitle: settings.heroTagline || '"Main Seru, Tinggal Booking."',
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-playing-a-video-game-with-a-controller-41975-large.mp4',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1600&q=80',
+    thumbnailUrl: '/images/hero-1.jpg',
     isActive: true,
     sortOrder: 1
   };
@@ -73,7 +73,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         ) : (
           <img
-            src={currentSlide.thumbnailUrl || 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=1600&q=80'}
+            src={currentSlide.thumbnailUrl || '/images/hero-1.jpg'}
             alt="Gaming Setup Background"
             className="w-full h-full object-cover object-center"
           />

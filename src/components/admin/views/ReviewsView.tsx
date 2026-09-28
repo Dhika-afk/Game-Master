@@ -179,8 +179,11 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ reviews, onReviewsUpda
             <div className="pt-3 border-t border-neutral-800 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img
-                  src={r.customerPhoto || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(r.customerName)}`}
+                  src={r.customerPhoto || '/images/avatar-1.jpg'}
                   alt={r.customerName}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/avatar-1.jpg';
+                  }}
                   className="w-8 h-8 rounded-full bg-neutral-950 border border-neutral-800 object-cover"
                 />
                 <div>
@@ -308,10 +311,10 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ reviews, onReviewsUpda
                   URL Foto Profil (Opsional)
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   value={customerPhoto}
                   onChange={(e) => setCustomerPhoto(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="/images/avatar-1.jpg"
                   className="w-full px-3.5 py-2 rounded-xl bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-emerald-500 font-mono text-xs"
                 />
               </div>
