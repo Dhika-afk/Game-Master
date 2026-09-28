@@ -38,10 +38,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
     }
   };
 
-  const handleQuickFill = () => {
-    setUsername('admin');
-    setPassword('gamemaster2026');
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
@@ -118,17 +114,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
           </button>
         </form>
 
-        {/* Quick Demo Helper */}
-        <div className="mt-6 pt-5 border-t border-neutral-800 text-center">
-          <p className="text-[11px] text-neutral-500 mb-2">Kredensial Default Admin:</p>
-          <button
-            type="button"
-            onClick={handleQuickFill}
-            className="px-3 py-1.5 rounded-lg bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 text-xs font-mono text-blue-400 transition-colors inline-flex items-center gap-1.5"
-          >
-            <span>Auto-Fill: admin / gamemaster2026</span>
-          </button>
-        </div>
       </div>
     </div>
   );
