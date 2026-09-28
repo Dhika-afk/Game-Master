@@ -19,6 +19,13 @@ import {
   MediaItem,
   CategoryType
 } from './types.js';
+import {
+  INITIAL_PRODUCTS,
+  INITIAL_HERO_VIDEOS,
+  INITIAL_REVIEWS,
+  INITIAL_SETTINGS,
+  INITIAL_MEDIA
+} from './data/initialData.js';
 
 // Customer Components
 import { Navbar } from './components/Navbar.js';
@@ -44,45 +51,11 @@ export default function App() {
   const [currentView, setCurrentView] = useState<'customer' | 'admin'>('customer');
 
   // Application Data States
-  const [products, setProducts] = useState<Product[]>([]);
-  const [heroVideos, setHeroVideos] = useState<HeroVideo[]>([]);
-  const [reviews, setReviews] = useState<CustomerReview[]>([]);
-  const [settings, setSettings] = useState<WebsiteSettings>({
-    businessName: 'GAME MASTER MATARAM',
-    logoUrl: '/images/logo.jpg',
-    tagline: '"Your Game is Game Master"',
-    description: 'Rental PlayStation dan gaming console terpercaya di Mataram dan sekitarnya.',
-    locationArea: 'Mataram dan sekitarnya',
-    address: 'Jl. Majapahit No. 88, Kekalik Jaya, Kec. Sekarbela, Kota Mataram, NTB',
-    whatsappNumber: '6281936774036',
-    operationalHours: 'Setiap Hari: 09:00 - 23:00 WITA',
-    instagramHandle: '@gamemaster.mataram',
-    tiktokHandle: '@gamemastermataram',
-    accentColor: '#10b981',
-    heroTitle: 'GAME MASTER MATARAM',
-    heroTagline: '"Your Game is Game Master"',
-    heroDescription: 'Rental PlayStation & Gaming Console Mataram dan Sekitarnya',
-    consolesSummary: 'PS4 • PS3 • Nintendo Switch • PS2 • TV',
-    ctaTitle: 'SIAP MAIN?',
-    ctaSubtitle: 'Booking PlayStation favoritmu sekarang.',
-    footerText: 'Rental PlayStation dan gaming console terpercaya di Mataram dan sekitarnya. Unit terawat, stick original, full game terupdate, siap antar ke lokasimu.',
-    features: [
-      { id: 'f1', title: 'Harga transparan', description: 'Semua harga tertera jelas tanpa ada biaya tersembunyi.', icon: 'Tag' },
-      { id: 'f2', title: 'Booking mudah', description: 'Cukup pilih unit dan durasi, langsung konfirmasi WhatsApp.', icon: 'CheckCircle2' },
-      { id: 'f3', title: 'Antar–jemput', description: 'Layanan antar dan jemput unit langsung ke lokasi Anda.', icon: 'Truck' },
-      { id: 'f4', title: 'Pilihan console lengkap', description: 'Tersedia PS4, PS3, Nintendo Switch, PS2, hingga paket TV 32 inch.', icon: 'Gamepad2' },
-      { id: 'f5', title: 'Proses cepat', description: 'Konfirmasi ketersediaan dan pengiriman unit kilat dan tepat waktu.', icon: 'Zap' },
-      { id: 'f6', title: 'Pelayanan ramah', description: 'Customer service ramah dan siap membantu kebutuhan gaming Anda.', icon: 'Smile' }
-    ],
-    rentalSteps: [
-      { step: 'STEP 01', title: 'Pilih perangkat', description: 'Pilih PlayStation 4, PS3, Nintendo Switch, atau paket komplit TV.', icon: 'Gamepad2' },
-      { step: 'STEP 02', title: 'Pilih durasi', description: 'Tentukan lama sewa mulai dari harian hingga paket hemat mingguan.', icon: 'Clock' },
-      { step: 'STEP 03', title: 'Isi data booking', description: 'Isi formulir nama, nomor WhatsApp, dan alamat pengantaran Mataram.', icon: 'FileEdit' },
-      { step: 'STEP 04', title: 'Konfirmasi WhatsApp', description: 'Dapatkan Booking ID dan kirim rincian booking langsung ke admin.', icon: 'MessageSquare' },
-      { step: 'STEP 05', title: 'Perangkat diantar', description: 'Unit siap main diantar tepat waktu langsung ke lokasi Anda.', icon: 'Truck' }
-    ]
-  });
-  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [heroVideos, setHeroVideos] = useState<HeroVideo[]>(INITIAL_HERO_VIDEOS);
+  const [reviews, setReviews] = useState<CustomerReview[]>(INITIAL_REVIEWS);
+  const [settings, setSettings] = useState<WebsiteSettings>(INITIAL_SETTINGS);
+  const [media, setMedia] = useState<MediaItem[]>(INITIAL_MEDIA);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [stats, setStats] = useState<AdminStats | null>(null);
 
@@ -120,11 +93,11 @@ export default function App() {
         fetchSettings(),
         fetchMedia()
       ]);
-      setProducts(prodsRes);
-      setHeroVideos(videosRes);
-      setReviews(revsRes);
-      setSettings(settingsRes);
-      setMedia(mediaRes);
+      if (prodsRes && prodsRes.length > 0) setProducts(prodsRes);
+      if (videosRes && videosRes.length > 0) setHeroVideos(videosRes);
+      if (revsRes && revsRes.length > 0) setReviews(revsRes);
+      if (settingsRes && settingsRes.businessName) setSettings(settingsRes);
+      if (mediaRes && mediaRes.length > 0) setMedia(mediaRes);
     } catch (err) {
       console.error('Error loading public data:', err);
     } finally {

@@ -94,7 +94,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                           : 'border-neutral-800 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={img} alt={`${product.name} preview ${idx + 1}`} className="w-full h-full object-cover" />
+                      <img
+                        src={img}
+                        alt={`${product.name} preview ${idx + 1}`}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/images/logo.jpg';
+                        }}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>

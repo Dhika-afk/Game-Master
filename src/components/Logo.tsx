@@ -31,6 +31,9 @@ export const Logo: React.FC<LogoProps> = ({
           src="/images/logo.jpg"
           alt="GAME MASTER Logo"
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/logo.jpg';
+          }}
           className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${imgClassName}`}
         />
         {/* Subtle glossy overlay */}

@@ -75,6 +75,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <img
             src={currentSlide.thumbnailUrl || '/images/hero-1.jpg'}
             alt="Gaming Setup Background"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/images/hero-1.jpg';
+            }}
             className="w-full h-full object-cover object-center"
           />
         )}
